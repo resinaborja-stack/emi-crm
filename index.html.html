@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMI CRM – Energía, Mantenimiento e Innovación</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#F0F2F5;color:#1a1a1a;min-height:100vh;}
+:root{--navy:#1A2A4A;--red:#C0392B;--green:#1D9E75;--blue:#185FA5;--amber:#BA7517;}
+.container{max-width:1200px;margin:0 auto;padding:20px;}
+
+/* HEADER */
+.header{background:var(--navy);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.hdr-left{display:flex;align-items:center;gap:14px;}
+.logo-box{width:56px;height:56px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+.logo-box img{width:52px;height:52px;object-fit:contain;display:block;}
+.brand-name{font-size:18px;font-weight:600;color:#fff;}
+.brand-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:3px;}
+.hdr-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.btn{padding:8px 16px;border-radius:8px;border:none;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{opacity:.85;}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);}
+.btn-ghost:hover{background:rgba(255,255,255,.2);}
+.sync-info{font-size:11px;color:rgba(255,255,255,.5);}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.metric{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.metric .num{font-size:28px;font-weight:600;}
+.metric .lbl{font-size:12px;color:#888;margin-top:4px;}
+.metric.green .num{color:var(--green);}
+.metric.amber .num{color:var(--amber);}
+.metric.blue .num{color:var(--blue);}
+
+/* FILTROS */
+.filters{background:#fff;border-radius:10px;padding:14px 16px;display:flex;gap:10px;align-items:center;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);flex-wrap:wrap;}
+.filters input,.filters select{font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#1a1a1a;outline:none;}
+.filters input:focus,.filters select:focus{border-color:var(--navy);}
+.filters input{flex:1;min-width:180px;}
+.seg-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.seg-btn{font-size:12px;padding:5px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;cursor:pointer;color:#666;}
+.seg-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* TABLE */
+.table-card{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;margin-bottom:20px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{background:#F8F9FA;font-weight:500;color:#666;font-size:12px;padding:10px 12px;text-align:left;border-bottom:1px solid #eee;}
+tbody td{padding:10px 12px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:#FAFBFC;}
+.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
+.nc{display:flex;align-items:center;gap:8px;}
+.nc-name{font-weight:500;font-size:13px;}
+.nc-emp{font-size:11px;color:#888;}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;display:inline-block;}
+.p-activo{background:#E1F5EE;color:#085041;}
+.p-prospecto{background:#EEEDFE;color:#3C3489;}
+.p-negociacion{background:#FAEEDA;color:#633806;}
+.p-inactivo{background:#F5F5F5;color:#666;}
+.seg-pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.chip{display:inline-flex;font-size:11px;padding:3px 7px;border-radius:6px;font-weight:500;}
+.cv{background:#E1F5EE;color:#085041;}
+.cl{background:#E6F1FB;color:#0C447C;}
+.ce{background:#FAEEDA;color:#633806;}
+.ic-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid #e0e0e0;background:none;cursor:pointer;font-size:13px;color:#666;}
+.ic-btn:hover{background:#F0F2F5;}
+.acts{display:flex;gap:4px;}
+
+/* DETAIL PANEL */
+.detail-panel{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:20px;margin-bottom:20px;display:none;}
+.detail-panel.open{display:block;}
+.dp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #eee;}
+.dp-header h2{font-size:16px;font-weight:600;color:var(--navy);}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.dp-card{background:#F8F9FA;border-radius:10px;padding:14px;}
+.dp-card-title{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.bar-label{font-size:12px;color:#666;width:60px;text-align:right;flex-shrink:0;}
+.bar-track{flex:1;height:16px;background:#E8E8E8;border-radius:6px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:6px;transition:width .5s ease;}
+.bar-val{font-size:12px;font-weight:600;width:24px;}
+.stat-line{font-size:12px;color:#888;margin-top:8px;}
+.stat-line strong{color:#1a1a1a;}
+.hist-list{max-height:180px;overflow-y:auto;}
+.hist-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #eee;}
+.hist-item:last-child{border-bottom:none;}
+.hbadge{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;flex-shrink:0;align-self:flex-start;margin-top:2px;}
+.hist-text{font-size:12px;color:#1a1a1a;}
+.hist-date{font-size:10px;color:#aaa;margin-top:2px;}
+.add-act{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.add-act select,.add-act input{font-size:12px;padding:6px 9px;border-radius:7px;border:1px solid #ddd;background:#fff;outline:none;}
+.add-act input{flex:1;min-width:120px;}
+.add-act button{font-size:12px;padding:6px 12px;border-radius:7px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;}
+.notes-area{width:100%;font-size:13px;border-radius:8px;border:1px solid #ddd;padding:10px;min-height:110px;resize:vertical;font-family:inherit;outline:none;}
+.notes-area:focus{border-color:var(--navy);}
+.notes-footer{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.save-btn{font-size:12px;padding:6px 14px;border-radius:7px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;}
+.saved-msg{font-size:12px;color:var(--green);display:none;}
+
+/* LOADING */
+.loading-bar{text-align:center;padding:32px;color:#aaa;font-size:14px;}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid #ddd;border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty{padding:32px;text-align:center;color:#aaa;font-size:14px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+.toast.error{background:var(--red);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:flex-start;justify-content:center;padding-top:40px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:460px;box-shadow:0 8px 32px rgba(0,0,0,.15);}
+.modal h3{font-size:17px;font-weight:600;margin-bottom:16px;color:var(--navy);}
+.field{margin-bottom:12px;}
+.field label{font-size:12px;font-weight:500;color:#666;display:block;margin-bottom:4px;}
+.field input,.field select,.field textarea{width:100%;font-size:13px;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;outline:none;font-family:inherit;color:#1a1a1a;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy);}
+.field textarea{min-height:60px;resize:vertical;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid #eee;}
+.m-cancel{font-size:13px;padding:9px 18px;border-radius:8px;border:1px solid #ddd;background:none;cursor:pointer;color:#666;}
+.m-save{font-size:13px;padding:9px 18px;border-radius:8px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;}
+.footer{text-align:center;font-size:11px;color:#bbb;padding:16px 0 4px;}
+@media(max-width:768px){.metrics{grid-template-columns:repeat(2,1fr);}.dp-grid{grid-template-columns:1fr;}.grid2,.grid3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="hdr-left">
+    <div class="logo-box">
+      <img src="data:image/jpeg;base64,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" alt="EMI Logo">
+    </div>
+    <div>
+      <div class="brand-name">EMI · CRM Comercial</div>
+      <div class="brand-sub">Energía, Mantenimiento e Innovación</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <span class="sync-info" id="syncInfo">Conectando con Google Sheets...</span>
+    <button class="btn btn-ghost" onclick="syncNow()">↺ Sincronizar</button>
+    <button class="btn btn-ghost" onclick="exportCSV()">↓ CSV</button>
+    <button class="btn btn-red" onclick="openModal()">+ Nuevo cliente</button>
+  </div>
+</div>
+
+<!-- METRICS -->
+<div class="metrics" id="metrics">
+  <div class="metric"><div class="loading-bar"><span class="spinner"></span></div></div>
+  <div class="metric"><div class="loading-bar"></div></div>
+  <div class="metric"><div class="loading-bar"></div></div>
+  <div class="metric"><div class="loading-bar"></div></div>
+</div>
+
+<!-- SEGMENTOS -->
+<div class="seg-bar" id="segBar"></div>
+
+<!-- FILTROS -->
+<div class="filters">
+  <input type="text" id="search" placeholder="🔍  Buscar por nombre, empresa o email..." oninput="render()">
+  <select id="fSt" onchange="render()">
+    <option value="">Todos los estados</option>
+    <option>Activo</option><option>Prospecto</option><option>Negociación</option><option>Inactivo</option>
+  </select>
+  <select id="fSg" onchange="render()">
+    <option value="">Todos los segmentos</option>
+    <option>Flota</option><option>Delivery</option><option>Individual</option><option>Logística</option>
+  </select>
+</div>
+
+<!-- TABLA -->
+<div class="table-card">
+  <table>
+    <thead><tr>
+      <th style="width:200px">Cliente / Empresa</th>
+      <th style="width:100px">Segmento</th>
+      <th style="width:95px">Estado</th>
+      <th style="width:65px">Visitas</th>
+      <th style="width:65px">Llamadas</th>
+      <th style="width:65px">Emails</th>
+      <th style="width:95px">Ú. contacto</th>
+      <th style="width:100px">Interés</th>
+      <th style="width:90px">Acciones</th>
+    </tr></thead>
+    <tbody id="tbody">
+      <tr><td colspan="9" class="loading-bar"><span class="spinner"></span>Cargando clientes desde Google Sheets...</td></tr>
+    </tbody>
+  </table>
+  <div id="empty" class="empty" style="display:none">No se encontraron clientes.</div>
+</div>
+
+<!-- PANEL DETALLE -->
+<div class="detail-panel" id="detailPanel">
+  <div class="dp-header">
+    <h2 id="dpTitle">—</h2>
+    <button class="ic-btn" onclick="closeDetail()" style="width:auto;padding:0 10px;font-size:12px;">✕ Cerrar</button>
+  </div>
+  <div class="dp-grid">
+    <div class="dp-card">
+      <div class="dp-card-title">Actividad acumulada</div>
+      <div id="barChart"></div>
+    </div>
+    <div class="dp-card">
+      <div class="dp-card-title">Historial de contactos</div>
+      <div class="hist-list" id="histList"></div>
+      <div class="add-act">
+        <select id="actType"><option value="V">Visita</option><option value="L">Llamada</option><option value="E">Email</option></select>
+        <input type="text" id="actNote" placeholder="Nota del contacto...">
+        <button onclick="addActivity()">+ Registrar</button>
+      </div>
+    </div>
+    <div class="dp-card">
+      <div class="dp-card-title">Notas del comercial</div>
+      <textarea class="notes-area" id="notesArea" placeholder="Observaciones, próximos pasos, acuerdos alcanzados..."></textarea>
+      <div class="notes-footer">
+        <button class="save-btn" onclick="saveNotes()">💾 Guardar notas</button>
+        <span class="saved-msg" id="savedMsg">✓ Guardado en Google Sheets</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="mTitle">Nuevo cliente</h3>
+    <div class="grid2">
+      <div class="field"><label>Nombre completo</label><input id="fNombre" placeholder="Nombre completo"></div>
+      <div class="field"><label>Empresa</label><input id="fEmpresa" placeholder="Nombre de la empresa"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Email</label><input id="fEmail" type="email" placeholder="email@empresa.com"></div>
+      <div class="field"><label>Teléfono</label><input id="fTel" placeholder="+34 600 000 000"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Segmento</label>
+        <select id="fSeg"><option>Flota</option><option>Delivery</option><option>Individual</option><option>Logística</option></select>
+      </div>
+      <div class="field"><label>Estado</label>
+        <select id="fStatus"><option>Prospecto</option><option>Activo</option><option>Negociación</option><option>Inactivo</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Interés en motos</label>
+      <select id="fInteres"><option>50cc</option><option>125cc</option><option>50cc + 125cc</option><option>Sin definir</option></select>
+    </div>
+    <div class="grid3">
+      <div class="field"><label>Visitas</label><input id="fV" type="number" value="0" min="0"></div>
+      <div class="field"><label>Llamadas</label><input id="fL" type="number" value="0" min="0"></div>
+      <div class="field"><label>Emails</label><input id="fE" type="number" value="0" min="0"></div>
+    </div>
+    <div class="field"><label>Notas iniciales</label>
+      <textarea id="fNotas" placeholder="Observaciones, contexto inicial..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="m-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="m-save" onclick="saveClient()">Guardar cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<div class="footer">EMI – Energía, Mantenimiento e Innovación &nbsp;·&nbsp; CRM Comercial v2.0 · Conectado a Google Sheets</div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbya_wBPB6RJA6x329u4HTfRGiay_sJVxI9JaBKvs_uAgzc7c_q2t6pjsQdzrRXI-siCZw/exec";
+const AV_COLORS = ["#1A2A4A","#C0392B","#E8A020","#1D9E75","#534AB7","#D85A30","#185FA5","#3C3489"];
+const SEG_BG = {Flota:"#E6F1FB",Delivery:"#FAEEDA",Individual:"#E1F5EE","Logística":"#EEEDFE"};
+const SEG_TX = {Flota:"#0C447C",Delivery:"#633806",Individual:"#085041","Logística":"#3C3489"};
+
+let clientes = [];
+let editId = null;
+let detailId = null;
+
+// ── API ───────────────────────────────────────────────────────────────────
+async function api(params) {
+  const url = SCRIPT_URL + "?" + new URLSearchParams(params).toString();
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return res.json();
+}
+
+// ── INICIO ────────────────────────────────────────────────────────────────
+window.addEventListener("load", () => syncNow());
+
+async function syncNow() {
+  setSyncInfo("↻ Sincronizando...");
+  try {
+    const data = await api({action:"getAll"});
+    if (data && data.clientes !== undefined) {
+      clientes = data.clientes.map(normalizeCliente);
+      render();
+      setSyncInfo("✓ Sincronizado " + new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}));
+    } else {
+      setSyncInfo("⚠ Error al cargar datos");
+    }
+  } catch(e) {
+    setSyncInfo("⚠ Sin conexión a Sheets");
+    document.getElementById("tbody").innerHTML =
+      "<tr><td colspan='9' class='empty'>No se pudo conectar con Google Sheets.<br>Comprueba tu conexión a internet.</td></tr>";
+  }
+}
+
+function setSyncInfo(msg) {
+  document.getElementById("syncInfo").textContent = msg;
+}
+
+function normalizeCliente(c) {
+  return { ...c, visitas:parseInt(c.visitas)||0, llamadas:parseInt(c.llamadas)||0, emails:parseInt(c.emails)||0, historial:[] };
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function initials(n){ return (n||"?").split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase(); }
+function avColor(id){ const h=String(id).split("").reduce((a,c)=>a+c.charCodeAt(0),0); return AV_COLORS[h%AV_COLORS.length]; }
+function pillCls(s){ return {Activo:"p-activo",Prospecto:"p-prospecto","Negociación":"p-negociacion",Inactivo:"p-inactivo"}[s]||"p-inactivo"; }
+function today(){ return new Date().toISOString().split("T")[0]; }
+function fmtDate(d){ if(!d||d==="—")return"—"; const p=String(d).split("-"); return p.length===3?p[2]+"/"+p[1]+"/"+p[0].slice(2):"—"; }
+
+function renderMetrics() {
+  const tot=clientes.length, act=clientes.filter(c=>c.estado==="Activo").length,
+        neg=clientes.filter(c=>c.estado==="Negociación").length,
+        tc=clientes.reduce((a,c)=>a+(+c.visitas||0)+(+c.llamadas||0)+(+c.emails||0),0);
+  document.getElementById("metrics").innerHTML =
+    "<div class='metric'><div class='num'>"+tot+"</div><div class='lbl'>Clientes totales</div></div>" +
+    "<div class='metric green'><div class='num'>"+act+"</div><div class='lbl'>Clientes activos</div></div>" +
+    "<div class='metric amber'><div class='num'>"+neg+"</div><div class='lbl'>En negociación</div></div>" +
+    "<div class='metric blue'><div class='num'>"+tc+"</div><div class='lbl'>Contactos realizados</div></div>";
+}
+
+function renderSegBar() {
+  const segs = ["Todos",...new Set(clientes.map(c=>c.segmento).filter(Boolean))];
+  const cur = document.getElementById("fSg").value || "Todos";
+  document.getElementById("segBar").innerHTML = segs.map(s=>
+    "<button class='seg-btn"+(s===cur||(!cur&&s==="Todos")?" active":"")+"' onclick='clickSeg(""+s+"",this)'>"+s+"</button>"
+  ).join("");
+}
+
+function clickSeg(seg,btn) {
+  document.querySelectorAll(".seg-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("fSg").value = seg==="Todos" ? "" : seg;
+  render();
+}
+
+function render() {
+  const q  = document.getElementById("search").value.toLowerCase();
+  const st = document.getElementById("fSt").value;
+  const sg = document.getElementById("fSg").value;
+  const data = clientes.filter(c =>
+    (!q  || (c.nombre+c.empresa+c.email).toLowerCase().includes(q)) &&
+    (!st || c.estado===st) &&
+    (!sg || c.segmento===sg)
+  );
+  document.getElementById("empty").style.display = data.length ? "none" : "block";
+  document.getElementById("tbody").innerHTML = data.map(c => {
+    const bg=avColor(c.id), sB=SEG_BG[c.segmento]||"#F5F5F5", sT=SEG_TX[c.segmento]||"#666";
+    const ul = c.historial&&c.historial.length ? c.historial[c.historial.length-1].fecha : (c.creado||"—");
+    return "<tr>" +
+      "<td><div class='nc'><div class='av' style='background:"+bg+"'>"+initials(c.nombre)+"</div>" +
+      "<div><div class='nc-name'>"+c.nombre+"</div><div class='nc-emp'>"+c.empresa+"</div></div></div></td>" +
+      "<td><span class='seg-pill' style='background:"+sB+";color:"+sT+"'>"+c.segmento+"</span></td>" +
+      "<td><span class='pill "+pillCls(c.estado)+"'>"+c.estado+"</span></td>" +
+      "<td><span class='chip cv'>V "+(c.visitas||0)+"</span></td>" +
+      "<td><span class='chip cl'>L "+(c.llamadas||0)+"</span></td>" +
+      "<td><span class='chip ce'>E "+(c.emails||0)+"</span></td>" +
+      "<td style='font-size:12px;color:#888'>"+fmtDate(ul)+"</td>" +
+      "<td style='font-size:12px'>"+c.interes+"</td>" +
+      "<td><div class='acts'>" +
+        "<button class='ic-btn' onclick='openDetail(""+c.id+"")' title='Ver detalle'>👁</button>" +
+        "<button class='ic-btn' onclick='openModal(""+c.id+"")' title='Editar'>✏️</button>" +
+        "<button class='ic-btn' onclick='delClient(""+c.id+"")' title='Eliminar'>✕</button>" +
+      "</div></td></tr>";
+  }).join("");
+  renderMetrics();
+  renderSegBar();
+}
+
+// ── DETALLE ───────────────────────────────────────────────────────────────
+async function openDetail(id) {
+  detailId = id;
+  const c = clientes.find(x=>String(x.id)===String(id));
+  document.getElementById("dpTitle").textContent = c.nombre + " · " + c.empresa;
+  document.getElementById("notesArea").value = c.notas || "";
+  document.getElementById("savedMsg").style.display = "none";
+  renderBarChart(c);
+  document.getElementById("histList").innerHTML = "<div style='font-size:12px;color:#aaa;padding:8px'><span class='spinner'></span> Cargando...</div>";
+  const panel = document.getElementById("detailPanel");
+  panel.classList.add("open");
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+  try {
+    const data = await api({action:"getHist", id:c.id});
+    if (data && data.historial) { c.historial = data.historial; }
+  } catch(e) {}
+  renderHistorial(c);
+}
+
+function closeDetail() {
+  document.getElementById("detailPanel").classList.remove("open");
+  detailId = null;
+}
+
+function renderHistorial(c) {
+  const list = document.getElementById("histList");
+  if (!c.historial || !c.historial.length) {
+    list.innerHTML = "<div style='font-size:12px;color:#aaa;padding:8px 0'>Sin actividad registrada aún.</div>";
+    return;
+  }
+  const badge = {V:{cls:"cv",label:"Visita"},L:{cls:"cl",label:"Llamada"},E:{cls:"ce",label:"Email"}};
+  list.innerHTML = [...c.historial].reverse().map(h => {
+    const b = badge[h.tipo] || {cls:"cv",label:h.tipo};
+    return "<div class='hist-item'><span class='hbadge "+b.cls+"'>"+b.label+"</span>" +
+           "<div><div class='hist-text'>"+h.nota+"</div><div class='hist-date'>"+fmtDate(h.fecha)+"</div></div></div>";
+  }).join("");
+}
+
+function renderBarChart(c) {
+  const v=+c.visitas||0, l=+c.llamadas||0, e=+c.emails||0;
+  const max = Math.max(v,l,e,1);
+  const pct = n => Math.round(n/max*100);
+  document.getElementById("barChart").innerHTML =
+    "<div class='bar-row'><span class='bar-label'>Visitas</span><div class='bar-track'><div class='bar-fill' style='width:"+pct(v)+"%;background:#1D9E75'></div></div><span class='bar-val'>"+v+"</span></div>" +
+    "<div class='bar-row'><span class='bar-label'>Llamadas</span><div class='bar-track'><div class='bar-fill' style='width:"+pct(l)+"%;background:#185FA5'></div></div><span class='bar-val'>"+l+"</span></div>" +
+    "<div class='bar-row'><span class='bar-label'>Emails</span><div class='bar-track'><div class='bar-fill' style='width:"+pct(e)+"%;background:#BA7517'></div></div><span class='bar-val'>"+e+"</span></div>" +
+    "<div class='stat-line' style='margin-top:14px'>Total contactos: <strong>"+(v+l+e)+"</strong></div>" +
+    "<div class='stat-line' style='margin-top:5px'>Interés: <strong>"+c.interes+"</strong></div>" +
+    "<div class='stat-line' style='margin-top:5px'>Estado: <strong>"+c.estado+"</strong></div>";
+}
+
+async function addActivity() {
+  if (!detailId) return;
+  const c = clientes.find(x=>String(x.id)===String(detailId));
+  const tipo = document.getElementById("actType").value;
+  const nota = document.getElementById("actNote").value.trim() || "Sin descripción";
+  const entry = {clienteId:c.id, tipo, nota, fecha:today()};
+  if (!c.historial) c.historial = [];
+  c.historial.push(entry);
+  if (tipo==="V") c.visitas = (+c.visitas||0)+1;
+  else if (tipo==="L") c.llamadas = (+c.llamadas||0)+1;
+  else c.emails = (+c.emails||0)+1;
+  document.getElementById("actNote").value = "";
+  renderHistorial(c);
+  renderBarChart(c);
+  render();
+  try {
+    await api({action:"addHist", data:JSON.stringify(entry)});
+    await api({action:"save",    data:JSON.stringify(c)});
+    showToast("✓ Actividad guardada en Google Sheets");
+  } catch(e) { showToast("Error al guardar en Sheets", true); }
+}
+
+async function saveNotes() {
+  if (!detailId) return;
+  const c = clientes.find(x=>String(x.id)===String(detailId));
+  c.notas = document.getElementById("notesArea").value;
+  try {
+    await api({action:"save", data:JSON.stringify(c)});
+    const m = document.getElementById("savedMsg");
+    m.style.display = "inline";
+    setTimeout(()=>m.style.display="none", 2500);
+  } catch(e) { showToast("Error al guardar notas", true); }
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function openModal(id) {
+  editId = id || null;
+  document.getElementById("mTitle").textContent = id ? "Editar cliente" : "Nuevo cliente";
+  const c = id ? clientes.find(x=>String(x.id)===String(id)) : null;
+  document.getElementById("fNombre").value  = c ? c.nombre   : "";
+  document.getElementById("fEmpresa").value = c ? c.empresa  : "";
+  document.getElementById("fEmail").value   = c ? c.email    : "";
+  document.getElementById("fTel").value     = c ? c.tel      : "";
+  document.getElementById("fSeg").value     = c ? c.segmento : "Flota";
+  document.getElementById("fStatus").value  = c ? c.estado   : "Prospecto";
+  document.getElementById("fInteres").value = c ? c.interes  : "Sin definir";
+  document.getElementById("fV").value       = c ? c.visitas  : 0;
+  document.getElementById("fL").value       = c ? c.llamadas : 0;
+  document.getElementById("fE").value       = c ? c.emails   : 0;
+  document.getElementById("fNotas").value   = c ? c.notas    : "";
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+function closeModal() { document.getElementById("modalOverlay").classList.remove("open"); }
+
+async function saveClient() {
+  const d = {
+    nombre:   document.getElementById("fNombre").value  || "Sin nombre",
+    empresa:  document.getElementById("fEmpresa").value || "—",
+    email:    document.getElementById("fEmail").value,
+    tel:      document.getElementById("fTel").value,
+    segmento: document.getElementById("fSeg").value,
+    estado:   document.getElementById("fStatus").value,
+    interes:  document.getElementById("fInteres").value,
+    visitas:  parseInt(document.getElementById("fV").value)  || 0,
+    llamadas: parseInt(document.getElementById("fL").value)  || 0,
+    emails:   parseInt(document.getElementById("fE").value)  || 0,
+    notas:    document.getElementById("fNotas").value,
+  };
+  if (editId) {
+    d.id = editId;
+    const i = clientes.findIndex(x=>String(x.id)===String(editId));
+    clientes[i] = {...clientes[i], ...d};
+  } else {
+    d.historial = [];
+    d.id = "tmp_" + Date.now();
+    clientes.push(d);
+  }
+  closeModal();
+  render();
+  try {
+    const result = await api({action:"save", data:JSON.stringify(d)});
+    if (result && result.id && !editId) {
+      const idx = clientes.findIndex(x=>x.id===d.id);
+      if (idx > -1) clientes[idx].id = result.id;
+    }
+    showToast("✓ Cliente guardado en Google Sheets");
+  } catch(e) { showToast("Error al guardar cliente", true); }
+}
+
+async function delClient(id) {
+  if (!confirm("¿Eliminar este cliente? Esta acción no se puede deshacer.")) return;
+  if (detailId === id) closeDetail();
+  clientes = clientes.filter(c=>String(c.id)!==String(id));
+  render();
+  try {
+    await api({action:"delete", id:id});
+    showToast("✓ Cliente eliminado de Google Sheets");
+  } catch(e) { showToast("Error al eliminar", true); }
+}
+
+// ── CSV ───────────────────────────────────────────────────────────────────
+function exportCSV() {
+  const h = "Nombre,Empresa,Email,Teléfono,Segmento,Estado,Interés,Visitas,Llamadas,Emails,Notas";
+  const rows = clientes.map(c => [
+    '"'+(c.nombre||"")+'"', '"'+(c.empresa||"")+'"',
+    c.email, c.tel, c.segmento, c.estado, c.interes,
+    c.visitas, c.llamadas, c.emails,
+    '"'+((c.notas||"").replace(/"/g,"'"))+'"'
+  ].join(","));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿"+h+"
+"+rows.join("
+")],{type:"text/csv;charset=utf-8;"}));
+  a.download = "EMI_CRM_"+today()+".csv";
+  a.click();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg, isError) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+document.getElementById("modalOverlay").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
